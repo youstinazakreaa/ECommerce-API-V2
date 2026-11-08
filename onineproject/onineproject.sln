@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37216.2 d17.14
+VisualStudioVersion = 17.14.37216.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onineproject", "onineproject.csproj", "{2C9D7EC2-2DCF-4AB0-BB80-7514357133BC}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onine.Repository", "..\onine.Repository\onine.Repository.csproj", "{B8E521A0-1544-4D5B-AF86-778224F13038}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onine.services", "..\onine.services\onine.services.csproj", "{2000D561-F848-47A3-BD71-360DB7D408C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onineproject.Tests", "..\onineproject.Tests\onineproject.Tests.csproj", "{1DA132A7-3E68-4E63-8E1B-F51797B9700A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2000D561-F848-47A3-BD71-360DB7D408C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2000D561-F848-47A3-BD71-360DB7D408C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2000D561-F848-47A3-BD71-360DB7D408C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DA132A7-3E68-4E63-8E1B-F51797B9700A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DA132A7-3E68-4E63-8E1B-F51797B9700A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DA132A7-3E68-4E63-8E1B-F51797B9700A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DA132A7-3E68-4E63-8E1B-F51797B9700A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

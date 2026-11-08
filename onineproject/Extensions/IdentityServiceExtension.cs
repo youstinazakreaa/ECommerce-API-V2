@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using onine.core.Entites.Identity;
@@ -10,37 +11,49 @@ namespace onineproject.Extensions
 {
     public static class IdentityServiceExtension
     {
-      public static IServiceCollection AddIdentityservice (this IServiceCollection Services ,  IConfiguration configuration)
+        public static IServiceCollection AddIdentityservice(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            Services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ITokenService, TokenService>();
 
-            Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
-            Services.AddApplicationServices();
-            
-            
-            
-                Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = configuration["JWT:ValidIssuer"],
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
 
-            ValidateAudience = true,
-            ValidAudience = configuration["JWT:ValidAudience"],
+            var jwtKey = configuration["JWT:Key"];
 
-            ValidateLifetime = true,
+            if (string.IsNullOrWhiteSpace(jwtKey))
+            {
+                throw new InvalidOperationException(
+                    "JWT Key is missing from configuration.");
+            }
 
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration["JWT:Key"])
-            )
-        };
-    });
+            services.AddAuthentication(
+                JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters =
+                        new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer =
+                                configuration["JWT:ValidIssuer"],
 
-            return Services;
+                            ValidateAudience = true,
+                            ValidAudience =
+                                configuration["JWT:ValidAudience"],
+
+                            ValidateLifetime = true,
+
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey =
+                                new SymmetricSecurityKey(
+                                    Encoding.UTF8.GetBytes(jwtKey))
+                        };
+                });
+
+            return services;
         }
-
     }
 }

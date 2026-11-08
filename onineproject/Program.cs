@@ -13,7 +13,8 @@ using onineproject.Extensions;
 using onineproject.Helpers;
 using onineproject.Middlewares;
 using StackExchange.Redis;
-
+using onine.services;
+using onine.services.Settings;
 
 
 namespace onineproject
@@ -22,7 +23,12 @@ namespace onineproject
     {
         public static async Task Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args); 
+            var builder = WebApplication.CreateBuilder(args);
+
+
+
+
+
 
             // Add services to the container.
 
@@ -36,20 +42,47 @@ namespace onineproject
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddSingleton<IConnectionMultiplexer>(option =>
-            {
-                var connection = builder.Configuration.GetConnectionString("RedisConnection");
-                return ConnectionMultiplexer.Connect(connection);
 
+
+
+
+            builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+            {
+                var connection = builder.Configuration
+                    .GetConnectionString("RedisConnection");
+
+                if (string.IsNullOrWhiteSpace(connection))
+                {
+                    throw new InvalidOperationException(
+                        "Redis connection string is missing.");
+                }
+
+                return ConnectionMultiplexer.Connect(connection);
             });
+
+
+
+
+
             builder.Services.AddDbContext<AppIdentityDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
             });
 
 
+
+
+
             builder.Services.AddApplicationServices();
             builder.Services.AddIdentityservice(builder.Configuration);
+
+
+
+            builder.Services.Configure<EmailSettings>(
+                builder.Configuration.GetSection("EmailSettings"));
+
+            builder.Services.AddTransient<IEmailService, EmailService>();
+
 
 
             var app = builder.Build();
@@ -66,8 +99,14 @@ namespace onineproject
 
                 var IdentityDbcontext = services.GetRequiredService<AppIdentityDbContext>();
                 await IdentityDbcontext.Database.MigrateAsync();
-                 var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                await AppIdentityDbContextSeed.SeedUserAsync(userManager);
+
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                await IdentityRoleSeeder.SeedRolesAsync(roleManager);
+
+
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                await AppIdentityDbContextSeed.SeedUserAsync(
+                         userManager, builder.Configuration);
 
 
 
@@ -92,8 +131,9 @@ namespace onineproject
                 app.UseSwaggerMiddlewares();
 
 
-            }   
-            app.UseStatusCodePagesWithRedirects("/errors/{0}");
+            }
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+            //app.UseStatusCodePagesWithRedirects("/errors/{0}");
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
