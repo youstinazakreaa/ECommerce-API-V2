@@ -1,21 +1,28 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using onine.core.Entites.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace onine.Repository.Identity
 {
-    public class AppIdentityDbContext :IdentityDbContext <AppUser>
+    public class AppIdentityDbContext : IdentityDbContext<AppUser>
     {
         public AppIdentityDbContext(
-            DbContextOptions<AppIdentityDbContext>options):base(options)
-
+            DbContextOptions<AppIdentityDbContext> options)
+            : base(options)
         {
-            
+        }
+
+        public DbSet<Address> Addresses { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<AppUser>()
+                .HasOne(u => u.Address)
+                .WithOne(a => a.AppUser)
+                .HasForeignKey<Address>(a => a.AppUserId);
         }
     }
 }

@@ -59,7 +59,27 @@ namespace onine.Repository
             var query = SpecificationEvaluator<T> .GetQuery(_dbContext.Set<T>(), Spec);
             return await query.CountAsync();
         }
+        // Add, Update, Delete methods
+        public async Task  AddAsync(T entity)
+        {
+            await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+        public void Update(T entity)
+        {
+            _dbContext.Set<T>().Update(entity);
+            _dbContext.SaveChanges();
+        }
+        public void Delete(T entity)
+        {
+            _dbContext.Set<T>().Remove(entity);
+            _dbContext.SaveChanges();
+        }
 
+        public Task SaveChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
 

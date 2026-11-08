@@ -23,6 +23,11 @@ namespace onine.core.Repositories
         Task GetAll();
 
         Task<int> GetCountWithSpecAsync(ISpecifications<T> Spec);
+        Task AddAsync(T entity);
+        void Update(T entity);
+        void Delete(T entity);
+        Task SaveChangesAsync();
+        // Task<Action<global::AutoMapper.IMappingOperationOptions<object, void>>> GetByIdAsync(int productId);
         #endregion
     }
 }   

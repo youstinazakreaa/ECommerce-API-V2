@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace onine.Repository.Data
 {
-    public class ProductConfigration : IEntityTypeConfiguration<Product>
+    public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
@@ -17,6 +17,13 @@ namespace onine.Repository.Data
                 .WithMany();
             builder.HasOne(p => p.ProductBrand)
                 .WithMany();
+            builder.Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
+            builder.Property(p => p.StockQuantatiy)
+                .IsRequired()
+                .HasDefaultValue(0);
+            builder .ToTable(T=> T.HasCheckConstraint("CK_Product_StockQuantatiy", "[StockQuantatiy] >= 0"));
+
 
 
         }

@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Local secrets and environment overrides
+secrets.json
+appsettings.Local.json
+.env
+.env.*
+!.env.example

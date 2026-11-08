@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="MailKit" Version="4.18.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.30" />
+    <PackageReference Include="Stripe.net" Version="53.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\onine.core\onine.core.csproj" />
+    <ProjectReference Include="..\onine.Repository\onine.Repository.csproj" />
   </ItemGroup>
 
 </Project>
